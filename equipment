@@ -7,7 +7,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;600;700;800;900&family=Noto+Sans+Thai:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  
+
   body {
     min-height: 100vh;
     background: linear-gradient(180deg, #EEF2FF 0%, #F0FDFA 40%, #FFF7ED 100%);
@@ -15,22 +15,69 @@
     overflow-x: hidden;
   }
 
-  /* Decorative blobs */
   body::before, body::after {
     content: ''; position: fixed; border-radius: 50%; pointer-events: none; z-index: 0;
   }
-  body::before {
-    top: -120px; right: -80px; width: 350px; height: 350px;
-    background: radial-gradient(circle, #A78BFA20 0%, transparent 70%);
-  }
-  body::after {
-    bottom: -100px; left: -60px; width: 300px; height: 300px;
-    background: radial-gradient(circle, #4ECDC420 0%, transparent 70%);
-  }
+  body::before { top: -120px; right: -80px; width: 350px; height: 350px; background: radial-gradient(circle, #A78BFA20 0%, transparent 70%); }
+  body::after { bottom: -100px; left: -60px; width: 300px; height: 300px; background: radial-gradient(circle, #4ECDC420 0%, transparent 70%); }
 
   .container { max-width: 960px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }
 
-  /* Header */
+  /* ===== SETUP SCREEN ===== */
+  .setup-screen {
+    min-height: 100vh; display: flex; align-items: center; justify-content: center;
+    padding: 24px; position: relative; z-index: 1;
+  }
+  .setup-box {
+    background: #FFF; border-radius: 24px; padding: 40px; max-width: 640px; width: 100%;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.08);
+  }
+  .setup-box h1 { font-family: 'Kanit', sans-serif; font-size: 24px; font-weight: 800; color: #1E293B; margin-bottom: 8px; }
+  .setup-box .sub { color: #64748B; font-size: 14px; margin-bottom: 28px; line-height: 1.7; }
+  .setup-box label { display: block; font-weight: 700; font-size: 13px; color: #334155; margin-bottom: 6px; margin-top: 16px; }
+  .setup-box input[type="text"] {
+    width: 100%; padding: 12px 16px; border: 2px solid #E2E8F0; border-radius: 12px;
+    font-size: 14px; font-family: 'SF Mono', Consolas, monospace; outline: none; transition: border 0.2s;
+    background: #F8FAFC; color: #1E293B;
+  }
+  .setup-box input[type="text"]:focus { border-color: #7C3AED; }
+  .setup-box .hint { font-size: 11px; color: #94A3B8; margin-top: 4px; }
+  .step-num {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 24px; height: 24px; border-radius: 8px; font-size: 12px; font-weight: 800;
+    background: linear-gradient(135deg, #A78BFA, #7C3AED); color: #FFF; margin-right: 8px; flex-shrink: 0;
+  }
+  .step-title { font-weight: 800; font-size: 15px; color: #1E293B; margin-top: 24px; margin-bottom: 8px; display: flex; align-items: center; }
+  .step-desc { font-size: 13px; color: #64748B; line-height: 1.7; margin-bottom: 4px; }
+  .setup-box code {
+    background: #F1F5F9; padding: 2px 8px; border-radius: 6px; font-size: 12px;
+    font-family: 'SF Mono', Consolas, monospace; color: #7C3AED;
+  }
+  .setup-box pre {
+    background: #1E293B; color: #E2E8F0; padding: 16px; border-radius: 12px;
+    font-size: 12px; overflow-x: auto; margin: 8px 0; line-height: 1.6;
+    font-family: 'SF Mono', Consolas, monospace; white-space: pre-wrap;
+  }
+  .btn-connect {
+    margin-top: 28px; width: 100%; padding: 16px; border-radius: 14px; border: none;
+    background: linear-gradient(135deg, #4ECDC4 0%, #44B09E 100%);
+    color: #FFF; font-size: 16px; font-weight: 800; cursor: pointer;
+    box-shadow: 0 8px 24px #4ECDC440; transition: all 0.3s;
+    font-family: 'Kanit', sans-serif;
+  }
+  .btn-connect:hover { transform: translateY(-2px); box-shadow: 0 12px 32px #4ECDC460; }
+  .btn-connect:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+  .setup-error { color: #DC2626; font-size: 13px; font-weight: 600; margin-top: 12px; display: none; }
+  .setup-error.show { display: block; }
+  .btn-skip {
+    margin-top: 12px; width: 100%; padding: 12px; border-radius: 14px;
+    border: 2px solid #E2E8F0; background: transparent; color: #64748B;
+    font-size: 14px; font-weight: 600; cursor: pointer; font-family: 'Kanit', sans-serif;
+    transition: all 0.3s;
+  }
+  .btn-skip:hover { border-color: #CBD5E1; background: #F8FAFC; }
+
+  /* ===== HEADER ===== */
   .header { padding-top: 40px; display: flex; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
   .header-left { display: flex; align-items: center; gap: 12px; }
   .header-icon { font-size: 36px; animation: float 3s ease-in-out infinite; }
@@ -42,6 +89,7 @@
     background-clip: text; font-family: 'Kanit', sans-serif;
   }
   .header-sub { color: #64748B; font-size: 14px; font-weight: 500; padding-left: 50px; margin-top: 4px; }
+  .header-right { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
 
   .btn-admin {
     padding: 12px 24px; border-radius: 14px; border: 2px solid #E2E8F0;
@@ -52,22 +100,25 @@
   }
   .btn-admin:hover { border-color: #A78BFA; color: #7C3AED; box-shadow: 0 8px 20px #A78BFA20; }
 
-  /* Stats Row */
-  .stats-row {
-    display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 14px; margin-top: 28px;
+  .conn-badge {
+    padding: 8px 16px; border-radius: 12px; font-size: 12px; font-weight: 700;
+    display: flex; align-items: center; gap: 6px; letter-spacing: 0.3px;
   }
-  .stat-card {
-    border-radius: 16px; padding: 18px 20px;
-    animation: cardIn 0.5s ease both;
-  }
+  .conn-badge.online { background: #D1FAE5; color: #059669; }
+  .conn-badge.offline { background: #FEF3C7; color: #D97706; }
+  .conn-badge .dot { width: 8px; height: 8px; border-radius: 50%; }
+  .conn-badge.online .dot { background: #059669; animation: pulse 2s infinite; }
+  .conn-badge.offline .dot { background: #D97706; }
+
+  /* ===== STATS ===== */
+  .stats-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 14px; margin-top: 28px; }
+  .stat-card { border-radius: 16px; padding: 18px 20px; animation: cardIn 0.5s ease both; }
   .stat-card .stat-label { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
   .stat-card .stat-label span:last-child { font-size: 12px; color: #64748B; font-weight: 600; }
   .stat-card .stat-value { display: flex; align-items: baseline; gap: 4px; }
   .stat-card .stat-num { font-size: 28px; font-weight: 900; font-family: 'Kanit', sans-serif; }
   .stat-card .stat-unit { font-size: 12px; color: #94A3B8; font-weight: 600; }
 
-  /* Update banner */
   .update-banner {
     margin-top: 20px; padding: 14px 20px; border-radius: 14px;
     background: linear-gradient(135deg, #1E293B 0%, #334155 100%);
@@ -77,12 +128,11 @@
   .update-banner .label { color: #94A3B8; font-size: 13px; font-weight: 500; }
   .update-banner .time { color: #FFF; font-size: 14px; font-weight: 700; font-family: 'Kanit', sans-serif; }
 
-  /* Equipment Grid */
+  /* ===== EQUIPMENT GRID ===== */
   .equip-grid {
     display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
     gap: 20px; padding: 28px 0 60px;
   }
-
   .equip-card {
     background: #FFF; border-radius: 20px; padding: 28px 24px;
     position: relative; overflow: hidden;
@@ -92,40 +142,30 @@
   }
   .equip-card.out-of-stock { border-color: #FCA5A5; }
   .equip-card:hover { transform: translateY(-8px) scale(1.02); }
-  .equip-card .bg-accent {
-    position: absolute; top: 0; right: 0; width: 120px; height: 120px;
-    opacity: 0.08; border-radius: 0 20px 0 100%;
-  }
+  .equip-card .bg-accent { position: absolute; top: 0; right: 0; width: 120px; height: 120px; opacity: 0.08; border-radius: 0 20px 0 100%; }
   .equip-card .card-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 20px; }
-  .equip-card .icon-box {
-    width: 56px; height: 56px; border-radius: 16px;
-    display: flex; align-items: center; justify-content: center; font-size: 28px;
-  }
-  .badge {
-    padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 700; letter-spacing: 0.5px;
-  }
+  .equip-card .icon-box { width: 56px; height: 56px; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 28px; }
+  .badge { padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 700; letter-spacing: 0.5px; }
   .badge-ok { background: #D1FAE5; color: #059669; }
   .badge-low { background: #FEF3C7; color: #D97706; }
   .badge-out { background: #FEE2E2; color: #DC2626; }
-
-  .equip-card h3 { font-size: 17px; font-weight: 800; color: #1E293B; font-family: 'Noto Sans Thai', 'Kanit', sans-serif; margin-bottom: 4px; }
+  .equip-card h3 { font-size: 17px; font-weight: 800; color: #1E293B; font-family: 'Noto Sans Thai','Kanit',sans-serif; margin-bottom: 4px; }
   .equip-card .name-en { font-size: 12px; color: #94A3B8; font-weight: 500; letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 20px; }
   .equip-card .qty-row { display: flex; align-items: baseline; gap: 6px; }
-  .equip-card .qty-num { font-size: 42px; font-weight: 900; font-family: 'Kanit', sans-serif; line-height: 1; }
+  .equip-card .qty-num { font-size: 42px; font-weight: 900; font-family: 'Kanit', sans-serif; line-height: 1; transition: all 0.4s; }
   .equip-card .qty-unit { font-size: 15px; color: #94A3B8; font-weight: 600; }
   .equip-card .bar-bg { margin-top: 16px; height: 6px; border-radius: 3px; background: #F1F5F9; overflow: hidden; }
   .equip-card .bar-fill { height: 100%; border-radius: 3px; transition: width 1s cubic-bezier(0.34, 1.56, 0.64, 1); }
 
   .footer { text-align: center; padding: 20px; color: #CBD5E1; font-size: 12px; font-weight: 500; }
 
-  /* Modals */
+  /* ===== MODALS ===== */
   .modal-overlay {
     position: fixed; inset: 0; background: rgba(15,23,42,0.6); backdrop-filter: blur(12px);
     display: none; align-items: center; justify-content: center; z-index: 1000;
     animation: fadeIn 0.3s ease;
   }
   .modal-overlay.active { display: flex; }
-
   .modal-box {
     background: #FFF; border-radius: 24px; padding: 40px;
     box-shadow: 0 40px 80px rgba(0,0,0,0.2);
@@ -133,7 +173,6 @@
   }
   .modal-box.shake { animation: shake 0.5s ease; }
 
-  /* Pin modal */
   .pin-modal { width: 360px; text-align: center; }
   .pin-modal .pin-icon { font-size: 48px; margin-bottom: 12px; }
   .pin-modal h2 { font-size: 20px; font-weight: 800; color: #1E293B; font-family: 'Kanit', sans-serif; }
@@ -157,7 +196,6 @@
   .btn-pin:hover { transform: translateY(-2px); }
   .pin-hint { margin-top: 16px; font-size: 12px; color: #CBD5E1; }
 
-  /* Admin modal */
   .admin-modal { max-width: 560px; width: 92%; max-height: 85vh; overflow-y: auto; padding: 36px; }
   .admin-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 28px; }
   .admin-header h2 { font-size: 22px; font-weight: 800; color: #1E293B; font-family: 'Kanit', sans-serif; }
@@ -176,7 +214,7 @@
   }
   .edit-row .edit-icon { font-size: 26px; width: 36px; text-align: center; }
   .edit-row .edit-info { flex: 1; }
-  .edit-row .edit-name { font-weight: 700; font-size: 14px; color: #334155; font-family: 'Noto Sans Thai', 'Kanit', sans-serif; }
+  .edit-row .edit-name { font-weight: 700; font-size: 14px; color: #334155; font-family: 'Noto Sans Thai','Kanit',sans-serif; }
   .edit-row .edit-name-en { font-size: 11px; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.5px; }
   .edit-controls { display: flex; align-items: center; gap: 8px; }
   .btn-minus, .btn-plus {
@@ -205,54 +243,36 @@
     font-family: 'Kanit', sans-serif; letter-spacing: 0.5px;
   }
   .btn-save:hover { transform: translateY(-2px); box-shadow: 0 12px 32px #4ECDC460; }
+  .btn-save:disabled { opacity: 0.6; cursor: wait; }
 
-  /* Toast */
   .toast {
     position: fixed; top: 24px; left: 50%; transform: translateX(-50%);
-    background: linear-gradient(135deg, #059669, #10B981); color: #FFF;
     padding: 14px 32px; border-radius: 16px; font-weight: 700; font-size: 15px;
-    box-shadow: 0 12px 32px #05966940; z-index: 2000;
-    font-family: 'Kanit', sans-serif; display: none;
-    animation: flashIn 2s ease forwards;
+    z-index: 2000; font-family: 'Kanit', sans-serif; display: none;
+    animation: flashIn 2.5s ease forwards;
   }
+  .toast.success { background: linear-gradient(135deg, #059669, #10B981); color: #FFF; box-shadow: 0 12px 32px #05966940; }
+  .toast.error { background: linear-gradient(135deg, #DC2626, #EF4444); color: #FFF; box-shadow: 0 12px 32px #DC262640; }
   .toast.show { display: block; }
 
-  /* Animations */
-  @keyframes cardIn {
-    from { opacity: 0; transform: translateY(30px) scale(0.95); }
-    to { opacity: 1; transform: translateY(0) scale(1); }
+  .loading-screen {
+    min-height: 100vh; display: flex; align-items: center; justify-content: center;
+    position: relative; z-index: 1;
   }
+  .loading-screen .loader { text-align: center; }
+  .loading-screen .loader-icon { font-size: 48px; animation: pulse 1.5s infinite; }
+  .loading-screen .loader-text { color: #64748B; font-family: 'Kanit', sans-serif; margin-top: 12px; }
+
+  @keyframes cardIn { from { opacity: 0; transform: translateY(30px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
   @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-  @keyframes slideUp {
-    from { opacity: 0; transform: translateY(40px) scale(0.96); }
-    to { opacity: 1; transform: translateY(0) scale(1); }
-  }
-  @keyframes float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-10px); }
-  }
-  @keyframes gradientMove {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-  }
-  @keyframes shake {
-    0%, 100% { transform: translateX(0); }
-    20% { transform: translateX(-12px); }
-    40% { transform: translateX(12px); }
-    60% { transform: translateX(-8px); }
-    80% { transform: translateX(8px); }
-  }
-  @keyframes flashIn {
-    0% { opacity: 0; transform: translateX(-50%) translateY(-10px); }
-    20% { opacity: 1; transform: translateX(-50%) translateY(0); }
-    80% { opacity: 1; transform: translateX(-50%) translateY(0); }
-    100% { opacity: 0; transform: translateX(-50%) translateY(-10px); }
-  }
-  @keyframes pulse {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.15); }
-  }
+  @keyframes slideUp { from { opacity: 0; transform: translateY(40px) scale(0.96); } to { opacity: 1; transform: translateY(0) scale(1); } }
+  @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+  @keyframes gradientMove { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+  @keyframes shake { 0%, 100% { transform: translateX(0); } 20% { transform: translateX(-12px); } 40% { transform: translateX(12px); } 60% { transform: translateX(-8px); } 80% { transform: translateX(8px); } }
+  @keyframes flashIn { 0% { opacity:0; transform: translateX(-50%) translateY(-10px); } 20% { opacity:1; transform: translateX(-50%) translateY(0); } 80% { opacity:1; transform: translateX(-50%) translateY(0); } 100% { opacity:0; transform: translateX(-50%) translateY(-10px); } }
+  @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.15); } }
+
+  .hidden { display: none !important; }
 
   @media (max-width: 600px) {
     .header { flex-direction: column; align-items: flex-start; }
@@ -260,166 +280,330 @@
     .stats-row { grid-template-columns: repeat(2, 1fr); }
     .equip-grid { grid-template-columns: 1fr; }
     .admin-modal { padding: 24px; }
+    .setup-box { padding: 24px; }
   }
 </style>
 </head>
 <body>
 
-<!-- Toast -->
-<div class="toast" id="toast">✅ บันทึกข้อมูลสำเร็จ!</div>
+<div class="toast" id="toast"></div>
 
-<!-- PIN Modal -->
-<div class="modal-overlay" id="pinModal">
-  <div class="modal-box pin-modal" id="pinBox" onclick="event.stopPropagation()">
-    <div class="pin-icon">🔐</div>
-    <h2>เข้าสู่ระบบผู้ดูแล</h2>
-    <p class="pin-sub">กรุณาใส่รหัส PIN</p>
-    <input type="password" class="pin-input" id="pinInput" maxlength="4" placeholder="● ● ● ●" 
-           oninput="this.value=this.value.replace(/\D/g,'')" onkeydown="if(event.key==='Enter')checkPin()">
-    <p class="pin-error" id="pinError">รหัสไม่ถูกต้อง ลองใหม่อีกครั้ง</p>
-    <button class="btn-pin" onclick="checkPin()">เข้าสู่ระบบ</button>
-    <p class="pin-hint">รหัสเริ่มต้น: 1234</p>
+<!-- ========== SETUP SCREEN ========== -->
+<div id="setupScreen" class="setup-screen hidden">
+  <div class="setup-box">
+    <div style="text-align:center;margin-bottom:24px">
+      <span style="font-size:48px">🔥</span>
+      <h1 style="margin-top:8px">ตั้งค่า Firebase</h1>
+      <p class="sub" style="margin-bottom:0">เชื่อมต่อกับ Firebase เพื่อให้ทุกคนเห็นข้อมูลเดียวกันแบบ Real-time</p>
+    </div>
+
+    <div class="step-title"><span class="step-num">1</span> สร้างโปรเจกต์ Firebase</div>
+    <p class="step-desc">ไปที่ <a href="https://console.firebase.google.com/" target="_blank" style="color:#7C3AED;font-weight:700">console.firebase.google.com</a> → กด <code>Add project</code> → ตั้งชื่อ → สร้างเสร็จ</p>
+
+    <div class="step-title"><span class="step-num">2</span> สร้าง Realtime Database</div>
+    <p class="step-desc">ในโปรเจกต์ → เมนูซ้าย <code>Build → Realtime Database</code> → <code>Create Database</code> → เลือก Region → เลือก <code>Start in test mode</code> → Enable</p>
+
+    <div class="step-title"><span class="step-num">3</span> ตั้ง Security Rules</div>
+    <p class="step-desc">ไปที่แท็บ <code>Rules</code> ใน Realtime Database แล้ววางโค้ดนี้:</p>
+    <pre>{
+  "rules": {
+    "equipment": {
+      ".read": true,
+      ".write": true
+    },
+    "lastUpdate": {
+      ".read": true,
+      ".write": true
+    }
+  }
+}</pre>
+
+    <div class="step-title"><span class="step-num">4</span> คัดลอก Config</div>
+    <p class="step-desc">ไปที่ ⚙️ <code>Project settings</code> → เลื่อนลงหา <code>Your apps</code> → กด <code>&lt;/&gt;</code> (Web) → ตั้งชื่อ → Register → คัดลอกค่ามาใส่ด้านล่าง</p>
+
+    <label>API Key</label>
+    <input type="text" id="cfgApiKey" placeholder="AIzaSy...">
+
+    <label>Auth Domain</label>
+    <input type="text" id="cfgAuthDomain" placeholder="your-project.firebaseapp.com">
+
+    <label>Database URL ⚠️ สำคัญ</label>
+    <input type="text" id="cfgDbUrl" placeholder="https://your-project-default-rtdb.firebaseio.com">
+    <p class="hint">ค่านี้สำคัญที่สุด — ต้องเป็น URL ของ Realtime Database</p>
+
+    <label>Project ID</label>
+    <input type="text" id="cfgProjectId" placeholder="your-project-id">
+
+    <label>Storage Bucket</label>
+    <input type="text" id="cfgBucket" placeholder="your-project.appspot.com">
+
+    <label>App ID</label>
+    <input type="text" id="cfgAppId" placeholder="1:123456:web:abcdef">
+
+    <p class="setup-error" id="setupError"></p>
+
+    <button class="btn-connect" id="btnConnect" onclick="connectFirebase()">🚀 เชื่อมต่อ Firebase</button>
+    <button class="btn-skip" onclick="skipSetup()">ใช้แบบ Offline (localStorage) แทน</button>
   </div>
 </div>
 
-<!-- Admin Modal -->
-<div class="modal-overlay" id="adminModal">
-  <div class="modal-box admin-modal" onclick="event.stopPropagation()">
-    <div class="admin-header">
+<!-- ========== LOADING ========== -->
+<div id="loadingScreen" class="loading-screen">
+  <div class="loader">
+    <div class="loader-icon">📦</div>
+    <p class="loader-text">กำลังโหลดข้อมูล...</p>
+  </div>
+</div>
+
+<!-- ========== MAIN DASHBOARD ========== -->
+<div id="mainDashboard" class="hidden">
+
+  <div class="modal-overlay" id="pinModal">
+    <div class="modal-box pin-modal" id="pinBox" onclick="event.stopPropagation()">
+      <div class="pin-icon">🔐</div>
+      <h2>เข้าสู่ระบบผู้ดูแล</h2>
+      <p class="pin-sub">กรุณาใส่รหัส PIN</p>
+      <input type="password" class="pin-input" id="pinInput" maxlength="4" placeholder="● ● ● ●"
+             oninput="this.value=this.value.replace(/\D/g,'')" onkeydown="if(event.key==='Enter')checkPin()">
+      <p class="pin-error" id="pinError">รหัสไม่ถูกต้อง ลองใหม่อีกครั้ง</p>
+      <button class="btn-pin" onclick="checkPin()">เข้าสู่ระบบ</button>
+      <p class="pin-hint">รหัสเริ่มต้น: 1234</p>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="adminModal">
+    <div class="modal-box admin-modal" onclick="event.stopPropagation()">
+      <div class="admin-header">
+        <div>
+          <h2>🛠️ อัปเดตจำนวนอุปกรณ์</h2>
+          <p class="sub">แก้ไขจำนวนคงเหลือแล้วกดบันทึก</p>
+        </div>
+        <button class="btn-close" onclick="closeAdmin()">✕</button>
+      </div>
+      <div id="editList"></div>
+      <button class="btn-save" id="btnSave" onclick="saveData()">💾 บันทึกข้อมูล</button>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="header">
       <div>
-        <h2>🛠️ อัปเดตจำนวนอุปกรณ์</h2>
-        <p class="sub">แก้ไขจำนวนคงเหลือแล้วกดบันทึก</p>
+        <div class="header-left">
+          <span class="header-icon">📦</span>
+          <h1>ระบบเช็คอุปกรณ์คงเหลือ</h1>
+        </div>
+        <p class="header-sub">Equipment Inventory Dashboard</p>
       </div>
-      <button class="btn-close" onclick="closeAdmin()">✕</button>
+      <div class="header-right">
+        <div class="conn-badge" id="connBadge">
+          <span class="dot"></span>
+          <span id="connText">Offline</span>
+        </div>
+        <button class="btn-admin" onclick="openPin()">🔐 <span>ผู้ดูแลระบบ</span></button>
+      </div>
     </div>
-    <div id="editList"></div>
-    <button class="btn-save" onclick="saveData()">💾 บันทึกข้อมูล</button>
+
+    <div class="stats-row" id="statsRow"></div>
+
+    <div class="update-banner">
+      <span style="font-size:16px">🕐</span>
+      <span class="label">อัปเดตล่าสุด:</span>
+      <span class="time" id="lastUpdateText">ยังไม่มีการอัปเดต</span>
+    </div>
+
+    <div class="equip-grid" id="equipGrid"></div>
+    <div class="footer">🏢 Equipment Inventory System • ระบบจัดการอุปกรณ์สำนักงาน</div>
   </div>
 </div>
 
-<!-- Main Content -->
-<div class="container">
-  <!-- Header -->
-  <div class="header">
-    <div>
-      <div class="header-left">
-        <span class="header-icon">📦</span>
-        <h1>ระบบเช็คอุปกรณ์คงเหลือ</h1>
-      </div>
-      <p class="header-sub">Equipment Inventory Dashboard</p>
-    </div>
-    <button class="btn-admin" onclick="openPin()">🔐 <span>ผู้ดูแลระบบ</span></button>
-  </div>
-
-  <!-- Stats -->
-  <div class="stats-row" id="statsRow"></div>
-
-  <!-- Update Banner -->
-  <div class="update-banner">
-    <span style="font-size:16px">🕐</span>
-    <span class="label">อัปเดตล่าสุด:</span>
-    <span class="time" id="lastUpdateText">ยังไม่มีการอัปเดต</span>
-  </div>
-
-  <!-- Equipment Grid -->
-  <div class="equip-grid" id="equipGrid"></div>
-
-  <div class="footer">🏢 Equipment Inventory System • ระบบจัดการอุปกรณ์สำนักงาน</div>
-</div>
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
 
 <script>
 const ADMIN_PIN = "1234";
 
 const DEFAULT_EQUIPMENT = [
-  { id: "power_strip", name: "ปลั๊กไฟ", nameEn: "Power Strip", icon: "🔌", qty: 10, color: "#FF6B35", bgGrad: "linear-gradient(135deg, #FF6B35 0%, #F7C948 100%)" },
-  { id: "usbc", name: "สาย USB-C", nameEn: "USB-C Cable", icon: "🔗", qty: 15, color: "#4ECDC4", bgGrad: "linear-gradient(135deg, #4ECDC4 0%, #44B09E 100%)" },
-  { id: "lightning", name: "สาย Lightning", nameEn: "Lightning Cable", icon: "⚡", qty: 12, color: "#A78BFA", bgGrad: "linear-gradient(135deg, #A78BFA 0%, #7C3AED 100%)" },
-  { id: "headphone", name: "หูฟัง", nameEn: "Headphones", icon: "🎧", qty: 8, color: "#F472B6", bgGrad: "linear-gradient(135deg, #F472B6 0%, #EC4899 100%)" },
-  { id: "calculator", name: "เครื่องคิดเลขวิทยาศาสตร์", nameEn: "Scientific Calculator", icon: "🧮", qty: 5, color: "#60A5FA", bgGrad: "linear-gradient(135deg, #60A5FA 0%, #3B82F6 100%)" },
-  { id: "lamp", name: "โคมไฟ", nameEn: "Desk Lamp", icon: "💡", qty: 6, color: "#FBBF24", bgGrad: "linear-gradient(135deg, #FBBF24 0%, #F59E0B 100%)" },
-  { id: "adaptor_hub", name: "Adaptor Hub", nameEn: "Adaptor Hub", icon: "🔄", qty: 7, color: "#34D399", bgGrad: "linear-gradient(135deg, #34D399 0%, #10B981 100%)" },
+  { id:"power_strip", name:"ปลั๊กไฟ", nameEn:"Power Strip", icon:"🔌", qty:10, color:"#FF6B35", bgGrad:"linear-gradient(135deg, #FF6B35 0%, #F7C948 100%)" },
+  { id:"usbc", name:"สาย USB-C", nameEn:"USB-C Cable", icon:"🔗", qty:15, color:"#4ECDC4", bgGrad:"linear-gradient(135deg, #4ECDC4 0%, #44B09E 100%)" },
+  { id:"lightning", name:"สาย Lightning", nameEn:"Lightning Cable", icon:"⚡", qty:12, color:"#A78BFA", bgGrad:"linear-gradient(135deg, #A78BFA 0%, #7C3AED 100%)" },
+  { id:"headphone", name:"หูฟัง", nameEn:"Headphones", icon:"🎧", qty:8, color:"#F472B6", bgGrad:"linear-gradient(135deg, #F472B6 0%, #EC4899 100%)" },
+  { id:"calculator", name:"เครื่องคิดเลขวิทยาศาสตร์", nameEn:"Scientific Calculator", icon:"🧮", qty:5, color:"#60A5FA", bgGrad:"linear-gradient(135deg, #60A5FA 0%, #3B82F6 100%)" },
+  { id:"lamp", name:"โคมไฟ", nameEn:"Desk Lamp", icon:"💡", qty:6, color:"#FBBF24", bgGrad:"linear-gradient(135deg, #FBBF24 0%, #F59E0B 100%)" },
+  { id:"adaptor_hub", name:"Adaptor Hub", nameEn:"Adaptor Hub", icon:"🔄", qty:7, color:"#34D399", bgGrad:"linear-gradient(135deg, #34D399 0%, #10B981 100%)" },
 ];
 
 let equipment = [];
 let lastUpdate = null;
+let db = null;
+let useFirebase = false;
 
-// Load from localStorage
-function loadData() {
-  try {
-    const saved = localStorage.getItem("equipment-inventory-data");
-    if (saved) {
-      const parsed = JSON.parse(saved);
-      equipment = parsed.equipment || DEFAULT_EQUIPMENT;
-      lastUpdate = parsed.lastUpdate || null;
-    } else {
-      equipment = JSON.parse(JSON.stringify(DEFAULT_EQUIPMENT));
-    }
-  } catch (e) {
-    equipment = JSON.parse(JSON.stringify(DEFAULT_EQUIPMENT));
+// ===== INIT =====
+function init() {
+  const savedConfig = localStorage.getItem("firebase-config");
+  if (savedConfig) {
+    try { initFirebase(JSON.parse(savedConfig)); }
+    catch(e) { showSetup(); }
+  } else if (localStorage.getItem("offline-mode") === "true") {
+    useFirebase = false;
+    loadOfflineData();
+    showDashboard();
+  } else {
+    showSetup();
   }
+}
+
+function showSetup() {
+  document.getElementById("loadingScreen").classList.add("hidden");
+  document.getElementById("setupScreen").classList.remove("hidden");
+}
+
+function showDashboard() {
+  document.getElementById("loadingScreen").classList.add("hidden");
+  document.getElementById("setupScreen").classList.add("hidden");
+  document.getElementById("mainDashboard").classList.remove("hidden");
+  updateConnBadge();
   render();
 }
 
+// ===== FIREBASE =====
+function initFirebase(config) {
+  try {
+    if (!firebase.apps.length) firebase.initializeApp(config);
+    db = firebase.database();
+    useFirebase = true;
+
+    db.ref("equipment").on("value", (snapshot) => {
+      const data = snapshot.val();
+      if (data) {
+        equipment = DEFAULT_EQUIPMENT.map(def => {
+          const saved = data[def.id];
+          return saved ? { ...def, qty: saved.qty } : { ...def };
+        });
+      } else {
+        equipment = JSON.parse(JSON.stringify(DEFAULT_EQUIPMENT));
+        const updates = {};
+        equipment.forEach(e => { updates[e.id] = { qty: e.qty }; });
+        db.ref("equipment").set(updates);
+      }
+      render();
+    });
+
+    db.ref("lastUpdate").on("value", (snapshot) => {
+      lastUpdate = snapshot.val();
+      document.getElementById("lastUpdateText").textContent = lastUpdate || "ยังไม่มีการอัปเดต";
+    });
+
+    db.ref(".info/connected").on("value", (snap) => updateConnBadge(snap.val()));
+
+    showDashboard();
+  } catch(e) {
+    console.error("Firebase init failed:", e);
+    showSetup();
+    showSetupError("เชื่อมต่อไม่สำเร็จ: " + e.message);
+  }
+}
+
+function connectFirebase() {
+  const config = {
+    apiKey: document.getElementById("cfgApiKey").value.trim(),
+    authDomain: document.getElementById("cfgAuthDomain").value.trim(),
+    databaseURL: document.getElementById("cfgDbUrl").value.trim(),
+    projectId: document.getElementById("cfgProjectId").value.trim(),
+    storageBucket: document.getElementById("cfgBucket").value.trim(),
+    appId: document.getElementById("cfgAppId").value.trim(),
+  };
+  if (!config.databaseURL) { showSetupError("กรุณาใส่ Database URL"); return; }
+  if (!config.apiKey) { showSetupError("กรุณาใส่ API Key"); return; }
+
+  document.getElementById("btnConnect").disabled = true;
+  document.getElementById("btnConnect").textContent = "⏳ กำลังเชื่อมต่อ...";
+  localStorage.setItem("firebase-config", JSON.stringify(config));
+  localStorage.removeItem("offline-mode");
+  initFirebase(config);
+}
+
+function skipSetup() {
+  useFirebase = false;
+  localStorage.setItem("offline-mode", "true");
+  localStorage.removeItem("firebase-config");
+  loadOfflineData();
+  showDashboard();
+}
+
+function showSetupError(msg) {
+  const el = document.getElementById("setupError");
+  el.textContent = msg; el.classList.add("show");
+  document.getElementById("btnConnect").disabled = false;
+  document.getElementById("btnConnect").textContent = "🚀 เชื่อมต่อ Firebase";
+}
+
+function loadOfflineData() {
+  try {
+    const saved = localStorage.getItem("equipment-inventory-data");
+    if (saved) {
+      const p = JSON.parse(saved);
+      equipment = p.equipment || JSON.parse(JSON.stringify(DEFAULT_EQUIPMENT));
+      lastUpdate = p.lastUpdate || null;
+    } else { equipment = JSON.parse(JSON.stringify(DEFAULT_EQUIPMENT)); }
+  } catch(e) { equipment = JSON.parse(JSON.stringify(DEFAULT_EQUIPMENT)); }
+}
+
+function updateConnBadge(connected) {
+  const badge = document.getElementById("connBadge");
+  const text = document.getElementById("connText");
+  if (useFirebase && connected !== false) { badge.className = "conn-badge online"; text.textContent = "Real-time"; }
+  else if (useFirebase) { badge.className = "conn-badge offline"; text.textContent = "กำลังเชื่อมต่อ..."; }
+  else { badge.className = "conn-badge offline"; text.textContent = "Offline"; }
+}
+
+// ===== RENDER =====
 function render() {
-  renderStats();
-  renderGrid();
+  renderStats(); renderGrid();
   document.getElementById("lastUpdateText").textContent = lastUpdate || "ยังไม่มีการอัปเดต";
 }
 
 function renderStats() {
-  const total = equipment.reduce((s, e) => s + e.qty, 0);
-  const low = equipment.filter(e => e.qty > 0 && e.qty <= 3).length;
-  const out = equipment.filter(e => e.qty === 0).length;
-
+  const total = equipment.reduce((s,e) => s+e.qty, 0);
+  const low = equipment.filter(e => e.qty>0 && e.qty<=3).length;
+  const out = equipment.filter(e => e.qty===0).length;
   const stats = [
-    { label: "อุปกรณ์ทั้งหมด", value: total, unit: "ชิ้น", color: "#4ECDC4", bg: "#F0FDFA", icon: "📊" },
-    { label: "ประเภทอุปกรณ์", value: equipment.length, unit: "ประเภท", color: "#7C3AED", bg: "#F5F3FF", icon: "📋" },
-    { label: "เหลือน้อย", value: low, unit: "รายการ", color: "#F59E0B", bg: "#FFFBEB", icon: "⚠️" },
-    { label: "หมดแล้ว", value: out, unit: "รายการ", color: "#DC2626", bg: "#FEF2F2", icon: "🚫" },
+    { label:"อุปกรณ์ทั้งหมด", value:total, unit:"ชิ้น", color:"#4ECDC4", bg:"#F0FDFA", icon:"📊" },
+    { label:"ประเภทอุปกรณ์", value:equipment.length, unit:"ประเภท", color:"#7C3AED", bg:"#F5F3FF", icon:"📋" },
+    { label:"เหลือน้อย", value:low, unit:"รายการ", color:"#F59E0B", bg:"#FFFBEB", icon:"⚠️" },
+    { label:"หมดแล้ว", value:out, unit:"รายการ", color:"#DC2626", bg:"#FEF2F2", icon:"🚫" },
   ];
-
-  document.getElementById("statsRow").innerHTML = stats.map((s, i) => `
+  document.getElementById("statsRow").innerHTML = stats.map((s,i) => `
     <div class="stat-card" style="background:${s.bg};border:1px solid ${s.color}20;animation-delay:${i*0.1}s">
       <div class="stat-label"><span style="font-size:16px">${s.icon}</span><span>${s.label}</span></div>
-      <div class="stat-value">
-        <span class="stat-num" style="color:${s.color}">${s.value}</span>
-        <span class="stat-unit">${s.unit}</span>
-      </div>
-    </div>
-  `).join("");
+      <div class="stat-value"><span class="stat-num" style="color:${s.color}">${s.value}</span><span class="stat-unit">${s.unit}</span></div>
+    </div>`).join("");
 }
 
 function renderGrid() {
-  document.getElementById("equipGrid").innerHTML = equipment.map((item, i) => {
-    const isEmpty = item.qty === 0;
-    const isLow = item.qty > 0 && item.qty <= 3;
-    const badgeClass = isEmpty ? "badge-out" : isLow ? "badge-low" : "badge-ok";
-    const badgeText = isEmpty ? "หมด" : isLow ? "เหลือน้อย" : "พร้อมใช้";
-    const barColor = isEmpty ? "#DC2626" : isLow ? "#F59E0B" : item.bgGrad;
-    const barWidth = Math.min((item.qty / 20) * 100, 100);
-
+  document.getElementById("equipGrid").innerHTML = equipment.map((item,i) => {
+    const isEmpty = item.qty===0, isLow = item.qty>0 && item.qty<=3;
+    const bc = isEmpty?"badge-out":isLow?"badge-low":"badge-ok";
+    const bt = isEmpty?"หมด":isLow?"เหลือน้อย":"พร้อมใช้";
+    const barC = isEmpty?"#DC2626":isLow?"#F59E0B":item.bgGrad;
+    const bw = Math.min((item.qty/20)*100,100);
     return `
-      <div class="equip-card ${isEmpty ? 'out-of-stock' : ''}" style="animation:cardIn 0.6s cubic-bezier(0.22,1,0.36,1) ${i*0.08}s both"
+      <div class="equip-card ${isEmpty?'out-of-stock':''}" style="animation:cardIn .6s cubic-bezier(.22,1,.36,1) ${i*.08}s both"
            onmouseenter="this.style.boxShadow='0 20px 40px ${item.color}30, 0 8px 16px rgba(0,0,0,0.08)'"
            onmouseleave="this.style.boxShadow=''">
         <div class="bg-accent" style="background:${item.bgGrad}"></div>
         <div class="card-top">
           <div class="icon-box" style="background:${item.bgGrad};box-shadow:0 8px 20px ${item.color}40">${item.icon}</div>
-          <span class="badge ${badgeClass}">${badgeText}</span>
+          <span class="badge ${bc}">${bt}</span>
         </div>
-        <h3>${item.name}</h3>
-        <p class="name-en">${item.nameEn}</p>
-        <div class="qty-row">
-          <span class="qty-num" style="color:${isEmpty ? '#DC2626' : item.color};${isEmpty ? 'text-shadow:0 0 20px #FCA5A540' : ''}">${item.qty}</span>
-          <span class="qty-unit">ชิ้น</span>
-        </div>
-        <div class="bar-bg"><div class="bar-fill" style="width:${barWidth}%;background:${barColor}"></div></div>
-      </div>
-    `;
+        <h3>${item.name}</h3><p class="name-en">${item.nameEn}</p>
+        <div class="qty-row"><span class="qty-num" style="color:${isEmpty?'#DC2626':item.color};${isEmpty?'text-shadow:0 0 20px #FCA5A540':''}">${item.qty}</span><span class="qty-unit">ชิ้น</span></div>
+        <div class="bar-bg"><div class="bar-fill" style="width:${bw}%;background:${barC}"></div></div>
+      </div>`;
   }).join("");
 }
 
-// PIN Modal
+// ===== PIN =====
 function openPin() {
   document.getElementById("pinModal").classList.add("active");
   document.getElementById("pinInput").value = "";
@@ -427,17 +611,11 @@ function openPin() {
   document.getElementById("pinError").classList.remove("show");
   setTimeout(() => document.getElementById("pinInput").focus(), 100);
 }
-
-function closePin() {
-  document.getElementById("pinModal").classList.remove("active");
-}
-
+function closePin() { document.getElementById("pinModal").classList.remove("active"); }
 function checkPin() {
   const input = document.getElementById("pinInput");
-  if (input.value === ADMIN_PIN) {
-    closePin();
-    openAdmin();
-  } else {
+  if (input.value === ADMIN_PIN) { closePin(); openAdmin(); }
+  else {
     input.classList.add("error");
     document.getElementById("pinError").classList.add("show");
     const box = document.getElementById("pinBox");
@@ -447,75 +625,65 @@ function checkPin() {
   }
 }
 
-// Admin Modal
+// ===== ADMIN =====
 function openAdmin() {
-  const list = document.getElementById("editList");
-  list.innerHTML = equipment.map((item, i) => `
+  document.getElementById("editList").innerHTML = equipment.map((item,i) => `
     <div class="edit-row">
       <span class="edit-icon">${item.icon}</span>
-      <div class="edit-info">
-        <div class="edit-name">${item.name}</div>
-        <div class="edit-name-en">${item.nameEn}</div>
-      </div>
+      <div class="edit-info"><div class="edit-name">${item.name}</div><div class="edit-name-en">${item.nameEn}</div></div>
       <div class="edit-controls">
-        <button class="btn-minus" onclick="adjustQty(${i}, -1)">−</button>
-        <input type="number" class="qty-input" id="qty_${i}" min="0" value="${item.qty}" 
-               onchange="updateQtyInput(${i}, this.value)">
-        <button class="btn-plus" onclick="adjustQty(${i}, 1)">+</button>
+        <button class="btn-minus" onclick="adjustQty(${i},-1)">−</button>
+        <input type="number" class="qty-input" id="qty_${i}" min="0" value="${item.qty}" onchange="updateQtyInput(${i},this.value)">
+        <button class="btn-plus" onclick="adjustQty(${i},1)">+</button>
       </div>
-    </div>
-  `).join("");
+    </div>`).join("");
   document.getElementById("adminModal").classList.add("active");
 }
-
-function closeAdmin() {
-  document.getElementById("adminModal").classList.remove("active");
-}
-
-function adjustQty(index, delta) {
-  const input = document.getElementById("qty_" + index);
-  let val = Math.max(0, (parseInt(input.value) || 0) + delta);
-  input.value = val;
-}
-
-function updateQtyInput(index, val) {
-  const input = document.getElementById("qty_" + index);
-  input.value = Math.max(0, parseInt(val) || 0);
-}
+function closeAdmin() { document.getElementById("adminModal").classList.remove("active"); }
+function adjustQty(i,d) { const el=document.getElementById("qty_"+i); el.value=Math.max(0,(parseInt(el.value)||0)+d); }
+function updateQtyInput(i,v) { document.getElementById("qty_"+i).value=Math.max(0,parseInt(v)||0); }
 
 function saveData() {
-  equipment.forEach((item, i) => {
-    const input = document.getElementById("qty_" + i);
-    item.qty = Math.max(0, parseInt(input.value) || 0);
-  });
+  const btn = document.getElementById("btnSave");
+  btn.disabled = true; btn.textContent = "⏳ กำลังบันทึก...";
 
-  lastUpdate = new Date().toLocaleString("th-TH", {
-    timeZone: "Asia/Bangkok",
-    year: "numeric", month: "long", day: "numeric",
-    hour: "2-digit", minute: "2-digit", second: "2-digit",
-  });
+  equipment.forEach((item,i) => { item.qty = Math.max(0, parseInt(document.getElementById("qty_"+i).value)||0); });
 
-  try {
-    localStorage.setItem("equipment-inventory-data", JSON.stringify({ equipment, lastUpdate }));
-  } catch (e) {
-    console.error("Save failed:", e);
+  const now = new Date().toLocaleString("th-TH", {
+    timeZone:"Asia/Bangkok", year:"numeric", month:"long", day:"numeric",
+    hour:"2-digit", minute:"2-digit", second:"2-digit",
+  });
+  lastUpdate = now;
+
+  if (useFirebase && db) {
+    const updates = {};
+    equipment.forEach(e => { updates["equipment/"+e.id] = { qty: e.qty }; });
+    updates["lastUpdate"] = now;
+    db.ref().update(updates)
+      .then(() => { closeAdmin(); showToast("✅ บันทึกสำเร็จ! ทุกคนจะเห็นข้อมูลใหม่ทันที","success"); })
+      .catch(err => { showToast("❌ บันทึกไม่สำเร็จ: "+err.message,"error"); })
+      .finally(() => { btn.disabled=false; btn.textContent="💾 บันทึกข้อมูล"; });
+  } else {
+    try {
+      localStorage.setItem("equipment-inventory-data", JSON.stringify({ equipment, lastUpdate }));
+      closeAdmin(); render();
+      showToast("✅ บันทึกสำเร็จ! (Offline mode)","success");
+    } catch(e) { showToast("❌ บันทึกไม่สำเร็จ","error"); }
+    btn.disabled=false; btn.textContent="💾 บันทึกข้อมูล";
   }
-
-  closeAdmin();
-  render();
-
-  // Show toast
-  const toast = document.getElementById("toast");
-  toast.classList.add("show");
-  setTimeout(() => toast.classList.remove("show"), 2200);
 }
 
-// Close modals on overlay click
+function showToast(msg, type) {
+  const t = document.getElementById("toast");
+  t.textContent = msg; t.className = "toast "+type+" show";
+  t.style.animation = "none"; t.offsetHeight; t.style.animation = "flashIn 2.5s ease forwards";
+  setTimeout(() => t.classList.remove("show"), 2600);
+}
+
 document.getElementById("pinModal").addEventListener("click", closePin);
 document.getElementById("adminModal").addEventListener("click", closeAdmin);
 
-// Init
-loadData();
+init();
 </script>
 </body>
 </html>
